@@ -2338,8 +2338,6 @@ namespace POCOGenerator
                             Succeeded = succeeded,
                             Error = error
                         });
-
-                        //2. Write input class
                     }
                 }
             }

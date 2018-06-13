@@ -12,5 +12,7 @@ namespace Db.DbObject
         Exception Error { get; }
         Database Database { get; }
         string ClassName { get; set; }
+
+        //ProcedureParameter ProcedureParameter { get; set; }
     }
 }

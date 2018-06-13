@@ -1,0 +1,78 @@
+﻿using Dapper;
+using MBP.Models.Attribute;
+using MBP.Models.CustomizedSPModel.Usp_MBP_ProjectInfo_Read;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+
+namespace MBP.DAL.CustomizedSPDAL
+{
+    public class Usp_MBP_ProjectInfo_ReadDAL
+    {
+        private static SqlConnection Connection
+        {
+            get
+            {
+                return new SqlConnection()
+                {
+                    ConnectionString = DBConnection.Connection
+                };
+            }
+        }
+
+        public static List<Usp_MBP_ProjectInfo_ReadOM> ReadFuzzy(Usp_MBP_ProjectInfo_ReadIM inParameters, bool inDistinct = false)
+        {
+            IsValid(inParameters);
+
+            var result = Connection.Query<Usp_MBP_ProjectInfo_ReadOM>(
+                "[dbo].[Usp_MBP_ProjectInfo_Read]",
+                new
+                {
+                    inParameters.ID,
+                    inParameters.ProjectName,
+                    inParameters.Applicant,
+                    inParameters.ApplyDate,
+                    inParameters.endApplyDate,// For read fuzzy
+                    inParameters.StatusID
+                },
+                commandType: CommandType.StoredProcedure);
+
+            if (inDistinct)
+            {
+                result = result.Distinct();
+            }
+
+            return result.ToList();
+        }
+
+        public static void IsValid(Usp_MBP_ProjectInfo_ReadIM inParameters)
+        {
+            var errMsg = new StringBuilder();
+            StringLengthAttribute strLenAttr;
+            
+            // ProjectName
+            if (inParameters.ProjectName != null)
+            {
+                strLenAttr = typeof(Usp_MBP_ProjectInfo_ReadIM)
+                    .GetProperty("ProjectName")
+                    .GetCustomAttributes(typeof(StringLengthRangeAttribute), false)
+                    .Cast<StringLengthRangeAttribute>()
+                    .SingleOrDefault()._innerAttribute;
+
+                if (strLenAttr.MaximumLength < inParameters.ProjectName.Length)
+                {
+                    errMsg.AppendLine(strLenAttr.ErrorMessage);
+                }
+            }
+            
+            if (errMsg.Length > 0)
+            {
+                throw new ArgumentException(errMsg.ToString());
+            }
+        }
+    }
+}

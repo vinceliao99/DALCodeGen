@@ -38,74 +38,173 @@ namespace Db.POCOIterator
             bool isExistDbObject = (dbObjects.Any(o => o.Error == null));
 
             string namespaceOffset = string.Empty;
-            if (isExistDbObject)
+
+
+            IDbObjectTraverse lastDbObject = dbObjects.Last();
+            foreach (Procedure dbObject in dbObjects)
             {
                 // Using
                 WriteUsing();
 
                 // Namespace Start
                 namespaceOffset = WriteNamespaceStart();
-            }
 
-            /*IEnumerable<Table> tables = null;
-            if (IsNavigationProperties)
-            {
-                tables = dbObjects.Where(t => t.DbType == DbType.Table).Cast<Table>();
-            }*/
+                #region Stored Procedure Input Class
 
-            IDbObjectTraverse lastDbObject = dbObjects.Last();
-            foreach (IDbObjectTraverse dbObject in dbObjects)
-            {
                 // Class Name
                 string className = GetClassName(dbObject.Database.ToString(), dbObject.Schema, dbObject.Name, dbObject.DbType);
                 dbObject.ClassName = className;
 
-                if (dbObject.Error != null)
-                {
-                    // Error
-                    WriteError(dbObject, namespaceOffset);
-                }
-                else
-                {
-                    // Navigation Properties
-                    List<NavigationProperty> navigationProperties = GetNavigationProperties(dbObject/*, tables*/);
+                // Navigation Properties
+                List<NavigationProperty> navigationProperties = GetNavigationProperties(dbObject/*, tables*/);
 
-                    if (IsWriteObject(navigationProperties, dbObject))
+                if (IsWriteObject(navigationProperties, dbObject))
+                {
+                    // Class Attributes
+                    WriteClassAttributes(dbObject, namespaceOffset);
+
+                    // Class Start
+                    WriteClassStart(className + "OM", dbObject, namespaceOffset);
+
+                    // Constructor
+                    WriteConstructor(className, navigationProperties, dbObject, namespaceOffset);
+
+                    // Columns
+                    if (dbObject.Columns != null && dbObject.Columns.Any())
                     {
-                        // Class Attributes
-                        WriteClassAttributes(dbObject, namespaceOffset);
-
-                        // Class Start
-                        WriteClassStart(className, dbObject, namespaceOffset);
-
-                        // Constructor
-                        WriteConstructor(className, navigationProperties, dbObject, namespaceOffset);
-
-                        // Columns
-                        if (dbObject.Columns != null && dbObject.Columns.Any())
-                        {
-                            var columns = dbObject.Columns.OrderBy<IColumn, int>(c => c.ColumnOrdinal ?? 0);
-                            var lastColumn = columns.Last();
-                            foreach (IColumn column in columns)
-                                WriteColumn(column, column == lastColumn, dbObject, namespaceOffset);
-                        }
-
-                        // Navigation Properties
-                        WriteNavigationProperties(navigationProperties, dbObject, namespaceOffset);
-
-                        // Class End
-                        WriteClassEnd(dbObject, namespaceOffset);
+                        var columns = dbObject.Columns.OrderBy<IColumn, int>(c => c.ColumnOrdinal ?? 0);
+                        var lastColumn = columns.Last();
+                        foreach (IColumn column in columns)
+                            WriteColumn(column, column == lastColumn, dbObject, namespaceOffset);
                     }
+
+                    // Navigation Properties
+                    WriteNavigationProperties(navigationProperties, dbObject, namespaceOffset);
+
+                    // Class End
+                    WriteClassEnd(dbObject, namespaceOffset);
+
+
+                    #endregion
+
+                    #region Stored Procedure Input Class
+
+                    // Class Attributes
+                    WriteClassAttributes(dbObject, namespaceOffset);
+
+                    // Class Start
+                    WriteClassStart(className + "IM", dbObject, namespaceOffset);
+
+                    // Constructor
+                    WriteConstructor(className, navigationProperties, dbObject, namespaceOffset);
+
+                    // Stored Procedure Input Class
+                    if (dbObject.ProcedureParameters != null)
+                    {
+                        var spParams = dbObject.ProcedureParameters;
+                        var lastParam = spParams.Last();
+                        foreach (ProcedureParameter param in spParams)
+                            WriteSPParams(param, param == lastParam, dbObject, namespaceOffset);
+                    }
+
+                    // Navigation Properties
+                    WriteNavigationProperties(navigationProperties, dbObject, namespaceOffset);
+
+                    // Class End
+                    WriteClassEnd(dbObject, namespaceOffset);
+
+
+                    #endregion
+
+                    #region Dapper DAL Class
+
+                    // Class Attributes
+                    WriteClassAttributes(dbObject, namespaceOffset);
+
+                    // Class Start
+                    WriteClassStart(className + "DAL", dbObject, namespaceOffset);
+
+                    //Sql Connection                  
+                    pocoWriter.WriteKeyword(Tab + Tab + "private static ");
+                    pocoWriter.WriteUserType("SqlConnection");
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteLine(Tab + Tab + "{");
+                    pocoWriter.WriteLineKeyword(Tab + Tab + Tab + "get");
+                    pocoWriter.WriteLine(Tab + Tab + Tab + "{");
+                    pocoWriter.Write(Tab + Tab + Tab + Tab);
+                    pocoWriter.WriteKeyword("return new ");
+                    pocoWriter.WriteUserType("SqlConnection ");
+                    pocoWriter.Write("()");
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "{");
+                    pocoWriter.Write(Tab + Tab + Tab + Tab + Tab + "ConnectionString = ");
+                    pocoWriter.WriteUserType("DBConnection");
+                    pocoWriter.Write(".Connection");
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "};");
+                    pocoWriter.WriteLine(Tab + Tab + Tab + "}");
+                    pocoWriter.WriteLine(Tab + Tab + "}");
+
+                    pocoWriter.WriteKeyword(Tab + Tab + "public static ");
+                    pocoWriter.WriteUserType($"List<{className}OM> ");
+                    pocoWriter.Write("Execute(");
+                    pocoWriter.WriteUserType($"{className}IM ");
+                    pocoWriter.Write("inParameters, ");
+                    pocoWriter.WriteKeyword("bool ");
+                    pocoWriter.Write("inDistinct = ");
+                    pocoWriter.WriteKeyword("false");
+                    pocoWriter.Write(")");
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteLine(Tab + Tab + "{");
+                    pocoWriter.WriteKeyword(Tab + Tab + Tab + "var ");
+                    pocoWriter.Write("result = Connection.Query<");
+                    pocoWriter.WriteUserType($"{className}OM");
+                    pocoWriter.Write(">(");
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + $"\"[dbo].[{className}]\",");
+                    pocoWriter.WriteLineKeyword(Tab + Tab + Tab + Tab + "new");
+                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "{");
+
+                    // Stored Procedure Input Class
+                    if (dbObject.ProcedureParameters != null)
+                    {
+                        var spParams = dbObject.ProcedureParameters;
+                        var lastParam = spParams.Last();
+                        foreach (ProcedureParameter param in spParams)
+                        {
+                            pocoWriter.Write($"{Tab}{Tab}{Tab}{Tab}{Tab}inParameters.{param.parameter_name.Substring(1)}");
+                            if (!param.Equals(lastParam))
+                            {
+                                pocoWriter.Write(",");
+                                pocoWriter.WriteLine();
+                            }
+                        }
+                    }
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "},");
+                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "commandType: CommandType.StoredProcedure);");
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteKeyword(Tab + Tab + Tab + "if ");
+                    pocoWriter.Write("(inDistinct)");
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteLine(Tab + Tab + Tab + "{");
+                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "result = result.Distinct();");
+                    pocoWriter.WriteLine(Tab + Tab + Tab + "}");
+                    pocoWriter.WriteKeyword(Tab + Tab + Tab + "return ");
+                    pocoWriter.Write("result.ToList();");
+                    pocoWriter.WriteLine();
+                    pocoWriter.WriteLine(Tab + Tab + "}");
+                    WriteClassEnd(dbObject, namespaceOffset);
+
                 }
 
                 if (dbObject != lastDbObject)
                     pocoWriter.WriteLine();
-            }
 
-            if (isExistDbObject)
-            {
-                // Namespace End
                 WriteNamespaceEnd();
+
+                #endregion
+
             }
         }
 
@@ -1442,6 +1541,75 @@ namespace Db.POCOIterator
                 pocoWriter.WriteLine("}");
         }
 
+        #endregion
+
+        #region Stored Procedure Params
+        protected virtual void WriteSPParams(ProcedureParameter param, bool isLastColumn, IDbObjectTraverse dbObject, string namespaceOffset)
+        {
+            string originalParamName = NameHelper.CleanName(param.parameter_name);
+
+            string camelCaseParamName = originalParamName.Substring(1, 1).ToUpper() + originalParamName.Substring(2);
+
+            //WriteColumnAttributes(column, cleanColumnName, dbObject, namespaceOffset);
+
+            WriteColumnStart(namespaceOffset);
+
+            WriteSPParamsDataType(param);
+
+            WriteColumnName(camelCaseParamName);
+
+            WriteColumnEnd();
+
+            //WriteColumnComments(column);
+
+            pocoWriter.WriteLine();
+
+            if (IsNewLineBetweenMembers && isLastColumn == false)
+                pocoWriter.WriteLine();
+        }
+
+        protected virtual void WriteSPParamsDataType(ProcedureParameter column)
+        {
+            switch ((column.DataTypeDisplay ?? string.Empty).ToLower())
+            {
+                case "bigint": WriteColumnBigInt(false); break;
+                case "binary": WriteColumnBinary(); break;
+                case "bit": WriteColumnBit(false); break;
+                case "char": WriteColumnChar(); break;
+                case "date": WriteColumnDate(false); break;
+                case "datetime": WriteColumnDateTime(false); break;
+                case "datetime2": WriteColumnDateTime2(false); break;
+                case "datetimeoffset": WriteColumnDateTimeOffset(false); break;
+                case "decimal": WriteColumnDecimal(false); break;
+                case "filestream": WriteColumnFileStream(); break;
+                case "float": WriteColumnFloat(false); break;
+                case "geography": WriteColumnGeography(); break;
+                case "geometry": WriteColumnGeometry(); break;
+                case "hierarchyid": WriteColumnHierarchyId(); break;
+                case "image": WriteColumnImage(); break;
+                case "int": WriteColumnInt(false); break;
+                case "money": WriteColumnMoney(false); break;
+                case "nchar": WriteColumnNChar(); break;
+                case "ntext": WriteColumnNText(); break;
+                case "numeric": WriteColumnNumeric(false); break;
+                case "nvarchar": WriteColumnNVarChar(); break;
+                case "real": WriteColumnReal(false); break;
+                case "rowversion": WriteColumnRowVersion(); break;
+                case "smalldatetime": WriteColumnSmallDateTime(false); break;
+                case "smallint": WriteColumnSmallInt(false); break;
+                case "smallmoney": WriteColumnSmallMoney(false); break;
+                case "sql_variant": WriteColumnSqlVariant(); break;
+                case "text": WriteColumnText(); break;
+                case "time": WriteColumnTime(false); break;
+                case "timestamp": WriteColumnTimeStamp(); break;
+                case "tinyint": WriteColumnTinyInt(false); break;
+                case "uniqueidentifier": WriteColumnUniqueIdentifier(false); break;
+                case "varbinary": WriteColumnVarBinary(); break;
+                case "varchar": WriteColumnVarChar(); break;
+                case "xml": WriteColumnXml(); break;
+                default: WriteColumnObject(); break;
+            }
+        }
         #endregion
     }
 }
