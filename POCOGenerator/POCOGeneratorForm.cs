@@ -219,36 +219,39 @@ namespace POCOGenerator
                         toolStripStatusLabel.Text = string.Empty;
                         Application.DoEvents();
                     }
-                    else if (dbObject is Table && (dbObject is Db.DbObject.View) == false)
-                    {
-                        Table table = dbObject as Table;
-                        tablesNode = AddTablesNode(tablesNode, databaseCurrent, databaseNodeCurrent);
-                        AddTableNode(tablesNode, table);
-                    }
-                    else if (dbObject is Db.DbObject.View)
-                    {
-                        Db.DbObject.View view = dbObject as Db.DbObject.View;
-                        viewsNode = AddViewsNode(viewsNode, databaseCurrent, databaseNodeCurrent);
-                        AddViewNode(viewsNode, view);
-                    }
+                    //else if (dbObject is Table && (dbObject is Db.DbObject.View) == false)
+                    //{
+                    //    Table table = dbObject as Table;
+                    //    tablesNode = AddTablesNode(tablesNode, databaseCurrent, databaseNodeCurrent);
+                    //    AddTableNode(tablesNode, table);
+                    //}
+                    //else if (dbObject is Db.DbObject.View)
+                    //{
+                    //    Db.DbObject.View view = dbObject as Db.DbObject.View;
+                    //    viewsNode = AddViewsNode(viewsNode, databaseCurrent, databaseNodeCurrent);
+                    //    AddViewNode(viewsNode, view);
+                    //}
                     else if (dbObject is Procedure && (dbObject is Function) == false)
                     {
                         Procedure procedure = dbObject as Procedure;
-                        proceduresNode = AddProceduresNode(proceduresNode, databaseCurrent, databaseNodeCurrent);
-                        AddProcedureNode(proceduresNode, procedure);
+                        if (procedure.Name.Contains("Usp"))
+                        {
+                            proceduresNode = AddProceduresNode(proceduresNode, databaseCurrent, databaseNodeCurrent);
+                            AddProcedureNode(proceduresNode, procedure);
+                        }
                     }
-                    else if (dbObject is Function)
-                    {
-                        Function function = dbObject as Function;
-                        functionsNode = AddFunctionsNode(functionsNode, databaseCurrent, databaseNodeCurrent);
-                        AddFunctionNode(functionsNode, function);
-                    }
-                    else if (dbObject is TVP)
-                    {
-                        TVP tvp = dbObject as TVP;
-                        tvpsNode = AddTVPsNode(tvpsNode, databaseCurrent, databaseNodeCurrent);
-                        AddTVPNode(tvpsNode, tvp);
-                    }
+                    //else if (dbObject is Function)
+                    //{
+                    //    Function function = dbObject as Function;
+                    //    functionsNode = AddFunctionsNode(functionsNode, databaseCurrent, databaseNodeCurrent);
+                    //    AddFunctionNode(functionsNode, function);
+                    //}
+                    //else if (dbObject is TVP)
+                    //{
+                    //    TVP tvp = dbObject as TVP;
+                    //    tvpsNode = AddTVPsNode(tvpsNode, databaseCurrent, databaseNodeCurrent);
+                    //    AddTVPNode(tvpsNode, tvp);
+                    //}
                 };
 
                 DbHelper.BuildServerSchema(Server, InitialCatalog, buildingDbObject, builtDbObject);
@@ -2319,11 +2322,10 @@ namespace POCOGenerator
                 {
                     foreach (var dbObject in exportObjects)
                     {
-                        //1 Write ouput class
                         StringBuilder sb = new StringBuilder();
                         IterateDbObjects(dbObject, sb);
 
-                        fileName = dbObject.ClassName + ".cs";
+                        fileName = dbObject.ClassName + "DAL.cs";
                         foreach (char c in Path.GetInvalidFileNameChars())
                             fileName = fileName.Replace(c.ToString(), string.Empty);
 

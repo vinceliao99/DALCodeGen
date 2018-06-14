@@ -41,6 +41,7 @@ namespace Db.POCOIterator
 
 
             IDbObjectTraverse lastDbObject = dbObjects.Last();
+
             foreach (Procedure dbObject in dbObjects)
             {
                 // Using
@@ -49,7 +50,6 @@ namespace Db.POCOIterator
                 // Namespace Start
                 namespaceOffset = WriteNamespaceStart();
 
-                #region Stored Procedure Input Class
 
                 // Class Name
                 string className = GetClassName(dbObject.Database.ToString(), dbObject.Schema, dbObject.Name, dbObject.DbType);
@@ -60,60 +60,65 @@ namespace Db.POCOIterator
 
                 if (IsWriteObject(navigationProperties, dbObject))
                 {
-                    // Class Attributes
-                    WriteClassAttributes(dbObject, namespaceOffset);
+                    bool hasOutput = (dbObject.Columns != null && dbObject.Columns.Any());
+                    bool hasInput = (dbObject.ProcedureParameters != null && dbObject.ProcedureParameters.Any());
 
-                    // Class Start
-                    WriteClassStart(className + "OM", dbObject, namespaceOffset);
 
-                    // Constructor
-                    WriteConstructor(className, navigationProperties, dbObject, namespaceOffset);
-
+                    #region Stored Procedure Output Class
                     // Columns
-                    if (dbObject.Columns != null && dbObject.Columns.Any())
+                    if (hasOutput)
                     {
+                        // Class Attributes
+                        WriteClassAttributes(dbObject, namespaceOffset);
+
+                        // Class Start
+                        WriteClassStart(className + "OM", dbObject, namespaceOffset);
+
+                        // Constructor
+                        WriteConstructor(className, navigationProperties, dbObject, namespaceOffset);
+
+
                         var columns = dbObject.Columns.OrderBy<IColumn, int>(c => c.ColumnOrdinal ?? 0);
                         var lastColumn = columns.Last();
                         foreach (IColumn column in columns)
                             WriteColumn(column, column == lastColumn, dbObject, namespaceOffset);
+
+
+                        // Navigation Properties
+                        WriteNavigationProperties(navigationProperties, dbObject, namespaceOffset);
+
+                        // Class End
+                        WriteClassEnd(dbObject, namespaceOffset);
                     }
-
-                    // Navigation Properties
-                    WriteNavigationProperties(navigationProperties, dbObject, namespaceOffset);
-
-                    // Class End
-                    WriteClassEnd(dbObject, namespaceOffset);
-
-
                     #endregion
 
                     #region Stored Procedure Input Class
 
-                    // Class Attributes
-                    WriteClassAttributes(dbObject, namespaceOffset);
-
-                    // Class Start
-                    WriteClassStart(className + "IM", dbObject, namespaceOffset);
-
-                    // Constructor
-                    WriteConstructor(className, navigationProperties, dbObject, namespaceOffset);
-
-                    // Stored Procedure Input Class
-                    if (dbObject.ProcedureParameters != null)
+                    if (hasInput)
                     {
+                        // Class Attributes
+                        WriteClassAttributes(dbObject, namespaceOffset);
+
+                        // Class Start
+                        WriteClassStart(className + "IM", dbObject, namespaceOffset);
+
+                        // Constructor
+                        WriteConstructor(className, navigationProperties, dbObject, namespaceOffset);
+
+                        // Stored Procedure Input Class
+
                         var spParams = dbObject.ProcedureParameters;
                         var lastParam = spParams.Last();
                         foreach (ProcedureParameter param in spParams)
                             WriteSPParams(param, param == lastParam, dbObject, namespaceOffset);
+
+
+                        // Navigation Properties
+                        WriteNavigationProperties(navigationProperties, dbObject, namespaceOffset);
+
+                        // Class End
+                        WriteClassEnd(dbObject, namespaceOffset);
                     }
-
-                    // Navigation Properties
-                    WriteNavigationProperties(navigationProperties, dbObject, namespaceOffset);
-
-                    // Class End
-                    WriteClassEnd(dbObject, namespaceOffset);
-
-
                     #endregion
 
                     #region Dapper DAL Class
@@ -126,7 +131,8 @@ namespace Db.POCOIterator
 
                     //Sql Connection                  
                     pocoWriter.WriteKeyword(Tab + Tab + "private static ");
-                    pocoWriter.WriteUserType("SqlConnection");
+                    pocoWriter.WriteUserType("SqlConnection ");
+                    pocoWriter.Write("Connection");
                     pocoWriter.WriteLine();
                     pocoWriter.WriteLine(Tab + Tab + "{");
                     pocoWriter.WriteLineKeyword(Tab + Tab + Tab + "get");
@@ -146,28 +152,54 @@ namespace Db.POCOIterator
                     pocoWriter.WriteLine(Tab + Tab + "}");
 
                     pocoWriter.WriteKeyword(Tab + Tab + "public static ");
-                    pocoWriter.WriteUserType($"List<{className}OM> ");
+
+                    //If no output then void
+                    if (hasOutput)
+                    {
+                        pocoWriter.WriteUserType($"List<{className}OM> ");
+                    }
+                    else
+                    {
+                        pocoWriter.WriteKeyword("void ");
+                    }
                     pocoWriter.Write("Execute(");
-                    pocoWriter.WriteUserType($"{className}IM ");
-                    pocoWriter.Write("inParameters, ");
+
+                    if (hasInput)
+                    {
+                        pocoWriter.WriteUserType($"{className}IM ");
+                        pocoWriter.Write("inParameters, ");
+                    }
                     pocoWriter.WriteKeyword("bool ");
                     pocoWriter.Write("inDistinct = ");
                     pocoWriter.WriteKeyword("false");
                     pocoWriter.Write(")");
                     pocoWriter.WriteLine();
                     pocoWriter.WriteLine(Tab + Tab + "{");
-                    pocoWriter.WriteKeyword(Tab + Tab + Tab + "var ");
-                    pocoWriter.Write("result = Connection.Query<");
-                    pocoWriter.WriteUserType($"{className}OM");
-                    pocoWriter.Write(">(");
+                    pocoWriter.WriteKeyword(Tab + Tab + Tab);
+
+                    if (hasOutput)
+                    {
+                        pocoWriter.WriteKeyword("var ");
+                        pocoWriter.Write("result = ");
+                    }
+
+                    pocoWriter.Write("Connection.Query");
+
+                    //If has output then fill output class name
+                    if (hasOutput)
+                    {
+                        pocoWriter.WriteUserType($"<{className}OM>");
+                    }
+                    pocoWriter.Write("(");
                     pocoWriter.WriteLine();
                     pocoWriter.WriteLine(Tab + Tab + Tab + Tab + $"\"[dbo].[{className}]\",");
-                    pocoWriter.WriteLineKeyword(Tab + Tab + Tab + Tab + "new");
-                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "{");
+
 
                     // Stored Procedure Input Class
-                    if (dbObject.ProcedureParameters != null)
+                    if (hasInput)
                     {
+                        pocoWriter.WriteLineKeyword(Tab + Tab + Tab + Tab + "new");
+                        pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "{");
                         var spParams = dbObject.ProcedureParameters;
                         var lastParam = spParams.Last();
                         foreach (ProcedureParameter param in spParams)
@@ -179,23 +211,28 @@ namespace Db.POCOIterator
                                 pocoWriter.WriteLine();
                             }
                         }
+                        pocoWriter.WriteLine();
+                        pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "},");
                     }
-                    pocoWriter.WriteLine();
-                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "},");
+
                     pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "commandType: CommandType.StoredProcedure);");
-                    pocoWriter.WriteLine();
-                    pocoWriter.WriteKeyword(Tab + Tab + Tab + "if ");
-                    pocoWriter.Write("(inDistinct)");
-                    pocoWriter.WriteLine();
-                    pocoWriter.WriteLine(Tab + Tab + Tab + "{");
-                    pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "result = result.Distinct();");
-                    pocoWriter.WriteLine(Tab + Tab + Tab + "}");
-                    pocoWriter.WriteKeyword(Tab + Tab + Tab + "return ");
-                    pocoWriter.Write("result.ToList();");
-                    pocoWriter.WriteLine();
+
+                    if (hasOutput)
+                    {
+                        pocoWriter.WriteLine();
+                        pocoWriter.WriteKeyword(Tab + Tab + Tab + "if ");
+                        pocoWriter.Write("(inDistinct)");
+                        pocoWriter.WriteLine();
+                        pocoWriter.WriteLine(Tab + Tab + Tab + "{");
+                        pocoWriter.WriteLine(Tab + Tab + Tab + Tab + "result = result.Distinct();");
+                        pocoWriter.WriteLine(Tab + Tab + Tab + "}");
+                        pocoWriter.WriteKeyword(Tab + Tab + Tab + "return ");
+                        pocoWriter.Write("result.ToList();");
+                        pocoWriter.WriteLine();
+                    }
                     pocoWriter.WriteLine(Tab + Tab + "}");
                     WriteClassEnd(dbObject, namespaceOffset);
-
+                    pocoWriter.WriteLine();
                 }
 
                 if (dbObject != lastDbObject)
@@ -236,18 +273,28 @@ namespace Db.POCOIterator
         {
             pocoWriter.WriteKeyword("using");
             pocoWriter.WriteLine(" System;");
+            pocoWriter.WriteKeyword("using");
+            pocoWriter.WriteLine(" System.Collections.Generic;");
+            pocoWriter.WriteKeyword("using");
+            pocoWriter.WriteLine(" System.Data;");
+            pocoWriter.WriteKeyword("using");
+            pocoWriter.WriteLine(" Dapper;");
+            pocoWriter.WriteKeyword("using");
+            pocoWriter.WriteLine(" System.Linq;");
+            pocoWriter.WriteKeyword("using");
+            pocoWriter.WriteLine(" System.Data.SqlClient;");
 
-            if (IsNavigationProperties)
-            {
-                pocoWriter.WriteKeyword("using");
-                pocoWriter.WriteLine(" System.Collections.Generic;");
-            }
+            //if (IsNavigationProperties)
+            //{
+            //    pocoWriter.WriteKeyword("using");
+            //    pocoWriter.WriteLine(" System.Collections.Generic;");
+            //}
 
-            if (IsSpecialSQLTypes())
-            {
-                pocoWriter.WriteKeyword("using");
-                pocoWriter.WriteLine(" Microsoft.SqlServer.Types;");
-            }
+            //if (IsSpecialSQLTypes())
+            //{
+            //    pocoWriter.WriteKeyword("using");
+            //    pocoWriter.WriteLine(" Microsoft.SqlServer.Types;");
+            //}
         }
 
         protected virtual bool IsSpecialSQLTypes()
@@ -1572,38 +1619,38 @@ namespace Db.POCOIterator
         {
             switch ((column.DataTypeDisplay ?? string.Empty).ToLower())
             {
-                case "bigint": WriteColumnBigInt(false); break;
+                case "bigint": WriteColumnBigInt(true); break;
                 case "binary": WriteColumnBinary(); break;
-                case "bit": WriteColumnBit(false); break;
+                case "bit": WriteColumnBit(true); break;
                 case "char": WriteColumnChar(); break;
-                case "date": WriteColumnDate(false); break;
-                case "datetime": WriteColumnDateTime(false); break;
-                case "datetime2": WriteColumnDateTime2(false); break;
-                case "datetimeoffset": WriteColumnDateTimeOffset(false); break;
-                case "decimal": WriteColumnDecimal(false); break;
+                case "date": WriteColumnDate(true); break;
+                case "datetime": WriteColumnDateTime(true); break;
+                case "datetime2": WriteColumnDateTime2(true); break;
+                case "datetimeoffset": WriteColumnDateTimeOffset(true); break;
+                case "decimal": WriteColumnDecimal(true); break;
                 case "filestream": WriteColumnFileStream(); break;
-                case "float": WriteColumnFloat(false); break;
+                case "float": WriteColumnFloat(true); break;
                 case "geography": WriteColumnGeography(); break;
                 case "geometry": WriteColumnGeometry(); break;
                 case "hierarchyid": WriteColumnHierarchyId(); break;
                 case "image": WriteColumnImage(); break;
-                case "int": WriteColumnInt(false); break;
-                case "money": WriteColumnMoney(false); break;
+                case "int": WriteColumnInt(true); break;
+                case "money": WriteColumnMoney(true); break;
                 case "nchar": WriteColumnNChar(); break;
                 case "ntext": WriteColumnNText(); break;
-                case "numeric": WriteColumnNumeric(false); break;
+                case "numeric": WriteColumnNumeric(true); break;
                 case "nvarchar": WriteColumnNVarChar(); break;
-                case "real": WriteColumnReal(false); break;
+                case "real": WriteColumnReal(true); break;
                 case "rowversion": WriteColumnRowVersion(); break;
-                case "smalldatetime": WriteColumnSmallDateTime(false); break;
-                case "smallint": WriteColumnSmallInt(false); break;
-                case "smallmoney": WriteColumnSmallMoney(false); break;
+                case "smalldatetime": WriteColumnSmallDateTime(true); break;
+                case "smallint": WriteColumnSmallInt(true); break;
+                case "smallmoney": WriteColumnSmallMoney(true); break;
                 case "sql_variant": WriteColumnSqlVariant(); break;
                 case "text": WriteColumnText(); break;
-                case "time": WriteColumnTime(false); break;
+                case "time": WriteColumnTime(true); break;
                 case "timestamp": WriteColumnTimeStamp(); break;
-                case "tinyint": WriteColumnTinyInt(false); break;
-                case "uniqueidentifier": WriteColumnUniqueIdentifier(false); break;
+                case "tinyint": WriteColumnTinyInt(true); break;
+                case "uniqueidentifier": WriteColumnUniqueIdentifier(true); break;
                 case "varbinary": WriteColumnVarBinary(); break;
                 case "varchar": WriteColumnVarChar(); break;
                 case "xml": WriteColumnXml(); break;

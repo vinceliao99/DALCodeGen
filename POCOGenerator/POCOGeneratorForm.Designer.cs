@@ -164,8 +164,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel2MinSize = 650;
-            this.splitContainer1.Size = new System.Drawing.Size(1084, 712);
-            this.splitContainer1.SplitterDistance = 400;
+            this.splitContainer1.Size = new System.Drawing.Size(1084, 775);
+            this.splitContainer1.SplitterDistance = 399;
             this.splitContainer1.TabIndex = 0;
             // 
             // trvServer
@@ -180,7 +180,7 @@
             this.trvServer.Location = new System.Drawing.Point(0, 0);
             this.trvServer.Name = "trvServer";
             this.trvServer.SelectedImageIndex = 0;
-            this.trvServer.Size = new System.Drawing.Size(400, 712);
+            this.trvServer.Size = new System.Drawing.Size(399, 775);
             this.trvServer.TabIndex = 1;
             this.trvServer.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.trvServer_AfterCheck);
             this.trvServer.DrawNode += new System.Windows.Forms.DrawTreeNodeEventHandler(this.trvServer_DrawNode);
@@ -189,6 +189,7 @@
             // 
             // contextMenu
             // 
+            this.contextMenu.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeFilterToolStripMenuItem,
             this.filterSettingsToolStripMenuItem,
@@ -258,8 +259,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.panelMain);
-            this.splitContainer2.Size = new System.Drawing.Size(680, 712);
-            this.splitContainer2.SplitterDistance = 348;
+            this.splitContainer2.Size = new System.Drawing.Size(681, 775);
+            this.splitContainer2.SplitterDistance = 408;
             this.splitContainer2.TabIndex = 0;
             // 
             // txtPocoEditor
@@ -272,31 +273,32 @@
             this.txtPocoEditor.Location = new System.Drawing.Point(0, 0);
             this.txtPocoEditor.Name = "txtPocoEditor";
             this.txtPocoEditor.ReadOnly = true;
-            this.txtPocoEditor.Size = new System.Drawing.Size(680, 348);
+            this.txtPocoEditor.Size = new System.Drawing.Size(681, 408);
             this.txtPocoEditor.TabIndex = 0;
             this.txtPocoEditor.Text = "";
             this.txtPocoEditor.WordWrap = false;
             // 
             // contextMenuPocoEditor
             // 
+            this.contextMenuPocoEditor.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.contextMenuPocoEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripMenuItem,
             this.selectAllToolStripMenuItem});
             this.contextMenuPocoEditor.Name = "contextMenuPocoEditor";
-            this.contextMenuPocoEditor.Size = new System.Drawing.Size(123, 48);
+            this.contextMenuPocoEditor.Size = new System.Drawing.Size(135, 72);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripMenuItem.Image")));
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(134, 34);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(134, 34);
             this.selectAllToolStripMenuItem.Text = "Select All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
@@ -378,7 +380,7 @@
             this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMain.Location = new System.Drawing.Point(0, 0);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(680, 360);
+            this.panelMain.Size = new System.Drawing.Size(681, 363);
             this.panelMain.TabIndex = 0;
             // 
             // chkColumnDefaults
@@ -427,6 +429,7 @@
             this.chkEFDescription.TabIndex = 47;
             this.chkEFDescription.Text = "Description";
             this.chkEFDescription.UseVisualStyleBackColor = true;
+            this.chkEFDescription.Visible = false;
             this.chkEFDescription.CheckedChanged += new System.EventHandler(this.chkEFDescription_CheckedChanged);
             // 
             // txtInherit
@@ -452,12 +455,13 @@
             this.btnCommandLine.AutoSize = true;
             this.btnCommandLine.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnCommandLine.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCommandLine.Location = new System.Drawing.Point(443, 310);
+            this.btnCommandLine.Location = new System.Drawing.Point(444, 312);
             this.btnCommandLine.Name = "btnCommandLine";
             this.btnCommandLine.Size = new System.Drawing.Size(87, 23);
             this.btnCommandLine.TabIndex = 52;
             this.btnCommandLine.Text = "Command Line";
             this.btnCommandLine.UseVisualStyleBackColor = true;
+            this.btnCommandLine.Visible = false;
             this.btnCommandLine.Click += new System.EventHandler(this.btnCommandLine_Click);
             // 
             // chkNavigationPropertiesShowJoinTable
@@ -494,6 +498,7 @@
             this.chkEFForeignKey.TabIndex = 50;
             this.chkEFForeignKey.Text = "ForeignKey && InverseProperty";
             this.chkEFForeignKey.UseVisualStyleBackColor = true;
+            this.chkEFForeignKey.Visible = false;
             this.chkEFForeignKey.CheckedChanged += new System.EventHandler(this.chkEFForeignKey_CheckedChanged);
             // 
             // panelNavigationProperties1
@@ -623,6 +628,7 @@
             this.chkEFIndex.TabIndex = 49;
             this.chkEFIndex.Text = "Index (EF6)";
             this.chkEFIndex.UseVisualStyleBackColor = true;
+            this.chkEFIndex.Visible = false;
             this.chkEFIndex.CheckedChanged += new System.EventHandler(this.chkEFIndex_CheckedChanged);
             // 
             // chkEFComplexType
@@ -635,6 +641,7 @@
             this.chkEFComplexType.TabIndex = 48;
             this.chkEFComplexType.Text = "ComplexType";
             this.chkEFComplexType.UseVisualStyleBackColor = true;
+            this.chkEFComplexType.Visible = false;
             this.chkEFComplexType.CheckedChanged += new System.EventHandler(this.chkEFComplexType_CheckedChanged);
             // 
             // lblEF
@@ -646,6 +653,7 @@
             this.lblEF.Size = new System.Drawing.Size(278, 13);
             this.lblEF.TabIndex = 0;
             this.lblEF.Text = "(Table, Key, MaxLength, Timestamp, DatabaseGenerated)";
+            this.lblEF.Visible = false;
             // 
             // chkEFRequiredWithErrorMessage
             // 
@@ -657,6 +665,7 @@
             this.chkEFRequiredWithErrorMessage.TabIndex = 43;
             this.chkEFRequiredWithErrorMessage.Text = "Required with ErrorMessage";
             this.chkEFRequiredWithErrorMessage.UseVisualStyleBackColor = true;
+            this.chkEFRequiredWithErrorMessage.Visible = false;
             this.chkEFRequiredWithErrorMessage.CheckedChanged += new System.EventHandler(this.chkEFRequiredWithErrorMessage_CheckedChanged);
             // 
             // chkNewLineBetweenMembers
@@ -681,6 +690,7 @@
             this.chkEFConcurrencyCheck.TabIndex = 44;
             this.chkEFConcurrencyCheck.Text = "ConcurrencyCheck";
             this.chkEFConcurrencyCheck.UseVisualStyleBackColor = true;
+            this.chkEFConcurrencyCheck.Visible = false;
             this.chkEFConcurrencyCheck.CheckedChanged += new System.EventHandler(this.chkEFConcurrencyCheck_CheckedChanged);
             // 
             // chkEFStringLength
@@ -693,6 +703,7 @@
             this.chkEFStringLength.TabIndex = 45;
             this.chkEFStringLength.Text = "StringLength";
             this.chkEFStringLength.UseVisualStyleBackColor = true;
+            this.chkEFStringLength.Visible = false;
             this.chkEFStringLength.CheckedChanged += new System.EventHandler(this.chkEFStringLength_CheckedChanged);
             // 
             // chkEFDisplay
@@ -705,6 +716,7 @@
             this.chkEFDisplay.TabIndex = 46;
             this.chkEFDisplay.Text = "Display";
             this.chkEFDisplay.UseVisualStyleBackColor = true;
+            this.chkEFDisplay.Visible = false;
             this.chkEFDisplay.CheckedChanged += new System.EventHandler(this.chkEFDisplay_CheckedChanged);
             // 
             // chkSearchIgnoreCase
@@ -717,6 +729,7 @@
             this.chkSearchIgnoreCase.TabIndex = 36;
             this.chkSearchIgnoreCase.Text = "Ignore Case";
             this.chkSearchIgnoreCase.UseVisualStyleBackColor = true;
+            this.chkSearchIgnoreCase.Visible = false;
             this.chkSearchIgnoreCase.CheckedChanged += new System.EventHandler(this.chkSearchIgnoreCase_CheckedChanged);
             // 
             // txtReplace
@@ -725,6 +738,7 @@
             this.txtReplace.Name = "txtReplace";
             this.txtReplace.Size = new System.Drawing.Size(75, 20);
             this.txtReplace.TabIndex = 35;
+            this.txtReplace.Visible = false;
             this.txtReplace.TextChanged += new System.EventHandler(this.txtReplace_TextChanged);
             // 
             // lblReplace
@@ -735,6 +749,7 @@
             this.lblReplace.Size = new System.Drawing.Size(47, 13);
             this.lblReplace.TabIndex = 0;
             this.lblReplace.Text = "Replace";
+            this.lblReplace.Visible = false;
             // 
             // txtSearch
             // 
@@ -742,6 +757,7 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(75, 20);
             this.txtSearch.TabIndex = 34;
+            this.txtSearch.Visible = false;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // lblSearch
@@ -752,6 +768,7 @@
             this.lblSearch.Size = new System.Drawing.Size(41, 13);
             this.lblSearch.TabIndex = 0;
             this.lblSearch.Text = "Search";
+            this.lblSearch.Visible = false;
             // 
             // lblSingularDesc
             // 
@@ -762,6 +779,7 @@
             this.lblSingularDesc.Size = new System.Drawing.Size(107, 13);
             this.lblSingularDesc.TabIndex = 0;
             this.lblSingularDesc.Text = "(Tables, Views, TVPs)";
+            this.lblSingularDesc.Visible = false;
             // 
             // lblEFAnnotationsTables
             // 
@@ -772,6 +790,7 @@
             this.lblEFAnnotationsTables.Size = new System.Drawing.Size(43, 13);
             this.lblEFAnnotationsTables.TabIndex = 0;
             this.lblEFAnnotationsTables.Text = "(Tables)";
+            this.lblEFAnnotationsTables.Visible = false;
             // 
             // chkEFColumn
             // 
@@ -783,6 +802,7 @@
             this.chkEFColumn.TabIndex = 41;
             this.chkEFColumn.Text = "Column";
             this.chkEFColumn.UseVisualStyleBackColor = true;
+            this.chkEFColumn.Visible = false;
             this.chkEFColumn.CheckedChanged += new System.EventHandler(this.chkEFColumn_CheckedChanged);
             // 
             // chkEFRequired
@@ -795,6 +815,7 @@
             this.chkEFRequired.TabIndex = 42;
             this.chkEFRequired.Text = "Required";
             this.chkEFRequired.UseVisualStyleBackColor = true;
+            this.chkEFRequired.Visible = false;
             this.chkEFRequired.CheckedChanged += new System.EventHandler(this.chkEFRequired_CheckedChanged);
             // 
             // chkEF
@@ -807,6 +828,7 @@
             this.chkEF.TabIndex = 40;
             this.chkEF.Text = "EF";
             this.chkEF.UseVisualStyleBackColor = true;
+            this.chkEF.Visible = false;
             this.chkEF.CheckedChanged += new System.EventHandler(this.chkEF_CheckedChanged);
             // 
             // chkPartialClass
@@ -823,11 +845,12 @@
             // 
             // statusStrip
             // 
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 338);
+            this.statusStrip.Location = new System.Drawing.Point(0, 341);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(680, 22);
+            this.statusStrip.Size = new System.Drawing.Size(681, 22);
             this.statusStrip.TabIndex = 34;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -845,6 +868,7 @@
             this.lblEFAnnotations.Size = new System.Drawing.Size(154, 13);
             this.lblEFAnnotations.TabIndex = 0;
             this.lblEFAnnotations.Text = "EF Code-First Annotations";
+            this.lblEFAnnotations.Visible = false;
             // 
             // chkSingular
             // 
@@ -856,12 +880,15 @@
             this.chkSingular.TabIndex = 24;
             this.chkSingular.Text = "Singular";
             this.chkSingular.UseVisualStyleBackColor = true;
+            this.chkSingular.Visible = false;
             this.chkSingular.CheckedChanged += new System.EventHandler(this.chkSingular_CheckedChanged);
             // 
             // chkUsing
             // 
             this.chkUsing.AutoSize = true;
             this.chkUsing.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkUsing.Checked = true;
+            this.chkUsing.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkUsing.Location = new System.Drawing.Point(177, 99);
             this.chkUsing.Name = "chkUsing";
             this.chkUsing.Size = new System.Drawing.Size(51, 17);
@@ -883,16 +910,16 @@
             this.lblNamespace.AutoSize = true;
             this.lblNamespace.Location = new System.Drawing.Point(4, 124);
             this.lblNamespace.Name = "lblNamespace";
-            this.lblNamespace.Size = new System.Drawing.Size(64, 13);
+            this.lblNamespace.Size = new System.Drawing.Size(68, 13);
             this.lblNamespace.TabIndex = 0;
-            this.lblNamespace.Text = "Namespace";
+            this.lblNamespace.Text = "*Namespace";
             // 
             // btnCopy
             // 
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopy.AutoSize = true;
             this.btnCopy.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnCopy.Location = new System.Drawing.Point(631, 5);
+            this.btnCopy.Location = new System.Drawing.Point(632, 5);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(41, 23);
             this.btnCopy.TabIndex = 51;
@@ -906,6 +933,7 @@
             this.txtSchemaSeparator.Name = "txtSchemaSeparator";
             this.txtSchemaSeparator.Size = new System.Drawing.Size(45, 20);
             this.txtSchemaSeparator.TabIndex = 29;
+            this.txtSchemaSeparator.Visible = false;
             this.txtSchemaSeparator.TextChanged += new System.EventHandler(this.txtSchemaSeparator_TextChanged);
             // 
             // lblSchemaSeparator
@@ -916,6 +944,7 @@
             this.lblSchemaSeparator.Size = new System.Drawing.Size(95, 13);
             this.lblSchemaSeparator.TabIndex = 0;
             this.lblSchemaSeparator.Text = "Schema Separator";
+            this.lblSchemaSeparator.Visible = false;
             // 
             // chkIgnoreDboSchema
             // 
@@ -927,6 +956,7 @@
             this.chkIgnoreDboSchema.TabIndex = 28;
             this.chkIgnoreDboSchema.Text = "Ignore dbo Schema";
             this.chkIgnoreDboSchema.UseVisualStyleBackColor = true;
+            this.chkIgnoreDboSchema.Visible = false;
             this.chkIgnoreDboSchema.CheckedChanged += new System.EventHandler(this.chkIgnoreDboSchema_CheckedChanged);
             // 
             // chkIncludeSchema
@@ -939,6 +969,7 @@
             this.chkIncludeSchema.TabIndex = 27;
             this.chkIncludeSchema.Text = "Include Schema";
             this.chkIncludeSchema.UseVisualStyleBackColor = true;
+            this.chkIncludeSchema.Visible = false;
             this.chkIncludeSchema.CheckedChanged += new System.EventHandler(this.chkIncludeSchema_CheckedChanged);
             // 
             // txtDBSeparator
@@ -947,6 +978,7 @@
             this.txtDBSeparator.Name = "txtDBSeparator";
             this.txtDBSeparator.Size = new System.Drawing.Size(45, 20);
             this.txtDBSeparator.TabIndex = 26;
+            this.txtDBSeparator.Visible = false;
             this.txtDBSeparator.TextChanged += new System.EventHandler(this.txtDBSeparator_TextChanged);
             // 
             // lblDBSeparator
@@ -957,6 +989,7 @@
             this.lblDBSeparator.Size = new System.Drawing.Size(71, 13);
             this.lblDBSeparator.TabIndex = 0;
             this.lblDBSeparator.Text = "DB Separator";
+            this.lblDBSeparator.Visible = false;
             // 
             // chkIncludeDB
             // 
@@ -968,6 +1001,7 @@
             this.chkIncludeDB.TabIndex = 25;
             this.chkIncludeDB.Text = "Include DB";
             this.chkIncludeDB.UseVisualStyleBackColor = true;
+            this.chkIncludeDB.Visible = false;
             this.chkIncludeDB.CheckedChanged += new System.EventHandler(this.chkIncludeDB_CheckedChanged);
             // 
             // lblFixedName
@@ -978,6 +1012,7 @@
             this.lblFixedName.Size = new System.Drawing.Size(63, 13);
             this.lblFixedName.TabIndex = 0;
             this.lblFixedName.Text = "Fixed Name";
+            this.lblFixedName.Visible = false;
             // 
             // lblWordsSeparatorDesc
             // 
@@ -988,13 +1023,14 @@
             this.lblWordsSeparatorDesc.Size = new System.Drawing.Size(214, 13);
             this.lblWordsSeparatorDesc.TabIndex = 0;
             this.lblWordsSeparatorDesc.Text = "(Words between _ and words in CamelCase)";
+            this.lblWordsSeparatorDesc.Visible = false;
             // 
             // btnTypeMapping
             // 
             this.btnTypeMapping.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTypeMapping.AutoSize = true;
             this.btnTypeMapping.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnTypeMapping.Location = new System.Drawing.Point(538, 310);
+            this.btnTypeMapping.Location = new System.Drawing.Point(539, 312);
             this.btnTypeMapping.Name = "btnTypeMapping";
             this.btnTypeMapping.Size = new System.Drawing.Size(85, 23);
             this.btnTypeMapping.TabIndex = 53;
@@ -1008,7 +1044,7 @@
             this.btnClose.AutoSize = true;
             this.btnClose.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(629, 310);
+            this.btnClose.Location = new System.Drawing.Point(630, 312);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(43, 23);
             this.btnClose.TabIndex = 54;
@@ -1083,6 +1119,7 @@
             this.txtSuffix.Name = "txtSuffix";
             this.txtSuffix.Size = new System.Drawing.Size(75, 20);
             this.txtSuffix.TabIndex = 39;
+            this.txtSuffix.Visible = false;
             this.txtSuffix.TextChanged += new System.EventHandler(this.txtSuffix_TextChanged);
             // 
             // lblSuffix
@@ -1093,6 +1130,7 @@
             this.lblSuffix.Size = new System.Drawing.Size(33, 13);
             this.lblSuffix.TabIndex = 0;
             this.lblSuffix.Text = "Suffix";
+            this.lblSuffix.Visible = false;
             // 
             // txtPrefix
             // 
@@ -1100,6 +1138,7 @@
             this.txtPrefix.Name = "txtPrefix";
             this.txtPrefix.Size = new System.Drawing.Size(75, 20);
             this.txtPrefix.TabIndex = 38;
+            this.txtPrefix.Visible = false;
             this.txtPrefix.TextChanged += new System.EventHandler(this.txtPrefix_TextChanged);
             // 
             // lblPrefix
@@ -1110,6 +1149,7 @@
             this.lblPrefix.Size = new System.Drawing.Size(33, 13);
             this.lblPrefix.TabIndex = 0;
             this.lblPrefix.Text = "Prefix";
+            this.lblPrefix.Visible = false;
             // 
             // txtWordsSeparator
             // 
@@ -1117,6 +1157,7 @@
             this.txtWordsSeparator.Name = "txtWordsSeparator";
             this.txtWordsSeparator.Size = new System.Drawing.Size(45, 20);
             this.txtWordsSeparator.TabIndex = 30;
+            this.txtWordsSeparator.Visible = false;
             this.txtWordsSeparator.TextChanged += new System.EventHandler(this.txtWordsSeparator_TextChanged);
             // 
             // lblWordsSeparator
@@ -1127,6 +1168,7 @@
             this.lblWordsSeparator.Size = new System.Drawing.Size(87, 13);
             this.lblWordsSeparator.TabIndex = 0;
             this.lblWordsSeparator.Text = "Words Separator";
+            this.lblWordsSeparator.Visible = false;
             // 
             // chkLowerCase
             // 
@@ -1138,6 +1180,7 @@
             this.chkLowerCase.TabIndex = 33;
             this.chkLowerCase.Text = "lower case";
             this.chkLowerCase.UseVisualStyleBackColor = true;
+            this.chkLowerCase.Visible = false;
             this.chkLowerCase.CheckedChanged += new System.EventHandler(this.chkLowerCase_CheckedChanged);
             // 
             // chkUpperCase
@@ -1150,6 +1193,7 @@
             this.chkUpperCase.TabIndex = 32;
             this.chkUpperCase.Text = "UPPER CASE";
             this.chkUpperCase.UseVisualStyleBackColor = true;
+            this.chkUpperCase.Visible = false;
             this.chkUpperCase.CheckedChanged += new System.EventHandler(this.chkUpperCase_CheckedChanged);
             // 
             // chkCamelCase
@@ -1162,6 +1206,7 @@
             this.chkCamelCase.TabIndex = 31;
             this.chkCamelCase.Text = "CamelCase";
             this.chkCamelCase.UseVisualStyleBackColor = true;
+            this.chkCamelCase.Visible = false;
             this.chkCamelCase.CheckedChanged += new System.EventHandler(this.chkCamelCase_CheckedChanged);
             // 
             // lblPOCO
@@ -1204,6 +1249,7 @@
             this.txtFixedClassName.Name = "txtFixedClassName";
             this.txtFixedClassName.Size = new System.Drawing.Size(75, 20);
             this.txtFixedClassName.TabIndex = 37;
+            this.txtFixedClassName.Visible = false;
             this.txtFixedClassName.TextChanged += new System.EventHandler(this.txtFixedClassName_TextChanged);
             // 
             // chkAllStructNullable
@@ -1239,9 +1285,11 @@
             this.lblClassName.Size = new System.Drawing.Size(73, 13);
             this.lblClassName.TabIndex = 0;
             this.lblClassName.Text = "Class Name";
+            this.lblClassName.Visible = false;
             // 
             // contextMenuTable
             // 
+            this.contextMenuTable.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.contextMenuTable.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.checkTablesConnectedFromToolStripMenuItem,
             this.checkTablesConnectedToToolStripMenuItem,
@@ -1251,54 +1299,54 @@
             this.checkRecursivelyTablesConnectedToolStripMenuItem,
             this.refreshTableToolStripMenuItem});
             this.contextMenuTable.Name = "contextMenuTable";
-            this.contextMenuTable.Size = new System.Drawing.Size(349, 158);
+            this.contextMenuTable.Size = new System.Drawing.Size(347, 158);
             // 
             // checkTablesConnectedFromToolStripMenuItem
             // 
             this.checkTablesConnectedFromToolStripMenuItem.Name = "checkTablesConnectedFromToolStripMenuItem";
-            this.checkTablesConnectedFromToolStripMenuItem.Size = new System.Drawing.Size(348, 22);
+            this.checkTablesConnectedFromToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.checkTablesConnectedFromToolStripMenuItem.Text = "Check Connected From This Table (FK This -> To)";
             this.checkTablesConnectedFromToolStripMenuItem.Click += new System.EventHandler(this.checkTablesConnectedFromToolStripMenuItem_Click);
             // 
             // checkTablesConnectedToToolStripMenuItem
             // 
             this.checkTablesConnectedToToolStripMenuItem.Name = "checkTablesConnectedToToolStripMenuItem";
-            this.checkTablesConnectedToToolStripMenuItem.Size = new System.Drawing.Size(348, 22);
+            this.checkTablesConnectedToToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.checkTablesConnectedToToolStripMenuItem.Text = "Check Connected To This Table (FK From -> This)";
             this.checkTablesConnectedToToolStripMenuItem.Click += new System.EventHandler(this.checkTablesConnectedToToolStripMenuItem_Click);
             // 
             // checkTablesConnectedToolStripMenuItem
             // 
             this.checkTablesConnectedToolStripMenuItem.Name = "checkTablesConnectedToolStripMenuItem";
-            this.checkTablesConnectedToolStripMenuItem.Size = new System.Drawing.Size(348, 22);
+            this.checkTablesConnectedToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.checkTablesConnectedToolStripMenuItem.Text = "Check Connected From && To This Table";
             this.checkTablesConnectedToolStripMenuItem.Click += new System.EventHandler(this.checkTablesConnectedToolStripMenuItem_Click);
             // 
             // checkRecursivelyTablesConnectedFromToolStripMenuItem
             // 
             this.checkRecursivelyTablesConnectedFromToolStripMenuItem.Name = "checkRecursivelyTablesConnectedFromToolStripMenuItem";
-            this.checkRecursivelyTablesConnectedFromToolStripMenuItem.Size = new System.Drawing.Size(348, 22);
+            this.checkRecursivelyTablesConnectedFromToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.checkRecursivelyTablesConnectedFromToolStripMenuItem.Text = "Check Recursively Connected From This Table";
             this.checkRecursivelyTablesConnectedFromToolStripMenuItem.Click += new System.EventHandler(this.checkRecursivelyTablesConnectedFromToolStripMenuItem_Click);
             // 
             // checkRecursivelyTablesConnectedToToolStripMenuItem
             // 
             this.checkRecursivelyTablesConnectedToToolStripMenuItem.Name = "checkRecursivelyTablesConnectedToToolStripMenuItem";
-            this.checkRecursivelyTablesConnectedToToolStripMenuItem.Size = new System.Drawing.Size(348, 22);
+            this.checkRecursivelyTablesConnectedToToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.checkRecursivelyTablesConnectedToToolStripMenuItem.Text = "Check Recursively Connected To This Table";
             this.checkRecursivelyTablesConnectedToToolStripMenuItem.Click += new System.EventHandler(this.checkRecursivelyTablesConnectedToToolStripMenuItem_Click);
             // 
             // checkRecursivelyTablesConnectedToolStripMenuItem
             // 
             this.checkRecursivelyTablesConnectedToolStripMenuItem.Name = "checkRecursivelyTablesConnectedToolStripMenuItem";
-            this.checkRecursivelyTablesConnectedToolStripMenuItem.Size = new System.Drawing.Size(348, 22);
+            this.checkRecursivelyTablesConnectedToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.checkRecursivelyTablesConnectedToolStripMenuItem.Text = "Check Recursively Connected From && To This Table";
             this.checkRecursivelyTablesConnectedToolStripMenuItem.Click += new System.EventHandler(this.checkRecursivelyTablesConnectedToolStripMenuItem_Click);
             // 
             // refreshTableToolStripMenuItem
             // 
             this.refreshTableToolStripMenuItem.Name = "refreshTableToolStripMenuItem";
-            this.refreshTableToolStripMenuItem.Size = new System.Drawing.Size(348, 22);
+            this.refreshTableToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.refreshTableToolStripMenuItem.Text = "Refresh";
             this.refreshTableToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
@@ -1307,9 +1355,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(1084, 712);
+            this.ClientSize = new System.Drawing.Size(1084, 775);
             this.Controls.Add(this.splitContainer1);
-            this.MinimumSize = new System.Drawing.Size(1100, 750);
+            this.MinimumSize = new System.Drawing.Size(1053, 580);
             this.Name = "POCOGeneratorForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "POCO Generator";
