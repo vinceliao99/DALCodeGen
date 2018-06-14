@@ -89,6 +89,7 @@ namespace Db.POCOIterator
 
                         // Class End
                         WriteClassEnd(dbObject, namespaceOffset);
+                        pocoWriter.WriteLine();
                     }
                     #endregion
 
@@ -118,6 +119,7 @@ namespace Db.POCOIterator
 
                         // Class End
                         WriteClassEnd(dbObject, namespaceOffset);
+                        pocoWriter.WriteLine();                   
                     }
                     #endregion
 
@@ -232,7 +234,6 @@ namespace Db.POCOIterator
                     }
                     pocoWriter.WriteLine(Tab + Tab + "}");
                     WriteClassEnd(dbObject, namespaceOffset);
-                    pocoWriter.WriteLine();
                 }
 
                 if (dbObject != lastDbObject)
